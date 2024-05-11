@@ -79,7 +79,7 @@ public class Classroom
         Student currentHighest = null;
         for(int classRank = 0;classRank<studentsSorted.length;classRank++)
         {
-            int highestStudedntIndex = 0;
+            int contenderIndex = 0;
             for (int j=0;j<workList.length;j++)
             {
                 Student currentStudent = workList[j];
@@ -90,12 +90,12 @@ public class Classroom
                         System.out.println("Current Highest: "+currentHighest);
                         System.out.println("New Highest: "+currentStudent);
                         currentHighest = currentStudent;
-                        highestStudedntIndex=j;
+                        contenderIndex=j;
                     }
                 }
             }
             studentsSorted[classRank]=currentHighest;
-            workList[highestStudedntIndex] = null;
+            workList[contenderIndex] = null;
             currentHighest=null;
         }
         return studentsSorted;
@@ -140,5 +140,4 @@ public class Classroom
         daSecond.removeStudent("Schlumbo","dumbo");
         daSecond.removeStudent("Rebecca","P Wtkterwgoehwrqwsadasfsdf");
     }
-
 }
