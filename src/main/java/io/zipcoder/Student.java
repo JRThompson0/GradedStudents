@@ -26,6 +26,10 @@ public class Student
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
+    public String toString()
+    {
+        return firstName+" "+lastName;
+    }
     public ArrayList<Double> getTestScores()
     {
         return testScores;
@@ -44,6 +48,8 @@ public class Student
     }
     public double getAverageTestScore()
     {
+        if (testScores == null)
+            return 0.0;
         double sum = 0;
         for(Double currentScore:testScores)
         {
@@ -51,7 +57,7 @@ public class Student
         }
         return sum/testScores.size();
     }
-    public String toString()
+    public String toStringLong()
     {
         StringBuilder studentRecordString = new StringBuilder("Student Name:   ");
         studentRecordString.append(firstName).append(" ").append(lastName).append("\n")
@@ -65,5 +71,16 @@ public class Student
                     .append(currentScore).append("\n");
         }
         return studentRecordString.toString();
+    }
+    public static void main(String[] args)
+    {
+        Student jebby = new Student("Jebby","Dougat");
+        jebby.addTestScore(100.00);
+        jebby.addTestScore(92.0);
+        jebby.addTestScore(99.0);
+        jebby.addTestScore(70);
+        System.out.println(jebby.getNumberOfTests());
+        System.out.println(jebby.getTestScores());
+        System.out.println(jebby.toStringLong());
     }
 }

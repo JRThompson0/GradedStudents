@@ -1,4 +1,6 @@
 package io.zipcoder;
 
-public class ClassroomTest {
+public class ClassroomTest
+{
+
 }
