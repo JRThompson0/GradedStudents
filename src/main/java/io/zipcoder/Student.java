@@ -7,12 +7,20 @@ public class Student
     private String firstName;
     private String lastName;
     private ArrayList<Double> testScores;
+    private static int sharedID=1;
 
     public Student(String firstName, String lastName)
     {
         this.firstName = firstName;
         this.lastName = lastName;
         testScores = new ArrayList<Double>();
+    }
+    public Student()
+    {
+        this.firstName="student";
+        this.lastName="#"+sharedID;
+        testScores = new ArrayList<Double>();
+        sharedID++;
     }
     public String getFirstName() {
         return firstName;
@@ -34,12 +42,23 @@ public class Student
     {
         return testScores;
     }
+    public Double[] getTestArray()
+    {
+        Double[] testScoresArray= new Double[testScores.size()];
+        for(int i=0;i<testScoresArray.length;i++)
+            testScoresArray[i] = testScores.get(i);
+        return testScoresArray;
+    }
     public int getNumberOfTests()
     {
         return testScores.size();
     }
     public void addTestScore(double dubble)
     {
+        if (!(dubble<=100&&dubble>=0)) {
+            System.out.println("Invalid test value.");
+            return;
+        }
         testScores.add(dubble);
     }
     public void setTestScore(int scoreIndex,double testScore)
@@ -71,6 +90,13 @@ public class Student
                     .append(currentScore).append("\n");
         }
         return studentRecordString.toString();
+    }
+    public void takeATest()
+    {
+        double scoreOffSet = Math.random()*60;
+        double score = scoreOffSet+40;
+        //System.out.println("Score: "+score);
+        testScores.add(score);
     }
     public static void main(String[] args)
     {

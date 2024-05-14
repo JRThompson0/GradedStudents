@@ -2,8 +2,7 @@ package io.zipcoder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static java.lang.Boolean.logicalOr;
+import java.util.HashMap;
 
 public class Classroom
 {
@@ -55,26 +54,43 @@ public class Classroom
     public double getAverageExamScore()
     {
         double scoreAverageTally=0;
+        int emptyTally=0;
         for(Student currentStudent:students)
         {
+            if (currentStudent==null) {
+                emptyTally++;
+                continue;
+            }
             scoreAverageTally=scoreAverageTally+currentStudent.getAverageTestScore();
         }
-        return scoreAverageTally/students.length;
+        return scoreAverageTally/(students.length-emptyTally);
     }
     public double getAverageExamScore(int examNumber)
     {
         examNumber=examNumber-1;
-        double scoreAverageTally= (double) 0;
+        double scoreAverageTally=0;
+        int emptyTally=0;
         for(Student currentStudent:students)
         {
-            ArrayList<Double> studentTestScores = currentStudent.getTestScores();
-            scoreAverageTally=scoreAverageTally+studentTestScores.get(examNumber);
+            if ((currentStudent==null))
+            {
+                emptyTally++;
+                continue;
+            }
+            Double[] studentTestScores = currentStudent.getTestArray();
+            scoreAverageTally=scoreAverageTally+studentTestScores[examNumber];
         }
-        return scoreAverageTally/students.length;
+        return scoreAverageTally/(students.length-emptyTally);
     }
     public Student[] getStudentsByScore()
     {
-        Student[] studentsSorted = new Student[students.length];
+        int emptyTally = 0;
+        for (Student currentStudent:students)
+        {
+            if(currentStudent==null)
+                emptyTally++;
+        }
+        Student[] studentsSorted = new Student[(students.length-emptyTally)];
         Student[] workList = students.clone();
         Student currentHighest = null;
         for(int classRank = 0;classRank<studentsSorted.length;classRank++)
@@ -83,22 +99,62 @@ public class Classroom
             for (int j=0;j<workList.length;j++)
             {
                 Student currentStudent = workList[j];
-                System.out.println("Looking at: "+currentStudent);
                 if (currentStudent!=null) {
+                    //System.out.println("Looking at: "+currentStudent);
                     if (currentStudent.getAverageTestScore()>(currentHighest!= null?currentHighest.getAverageTestScore():0))
                     {
-                        System.out.println("Current Highest: "+currentHighest);
-                        System.out.println("New Highest: "+currentStudent);
+                        //System.out.println("Current Highest: "+currentHighest);
+                        //System.out.println("New Highest: "+currentStudent);
                         currentHighest = currentStudent;
                         contenderIndex=j;
                     }
                 }
             }
-            studentsSorted[classRank]=currentHighest;
-            workList[contenderIndex] = null;
-            currentHighest=null;
+            if ((currentHighest!=null))
+            {
+                System.out.println("Class Rank " + (classRank + 1) + ":   " + currentHighest);
+                studentsSorted[classRank] = currentHighest;
+                workList[contenderIndex] = null;
+                currentHighest = null;
+            }
         }
         return studentsSorted;
+    }
+    public HashMap<Student, Character> getGradeBook()
+    {
+    Student[] studentsSorted = getStudentsByScore();
+        HashMap<Student, Character> gradeMap = new HashMap<Student, Character>();
+    for(int i = 0;i<studentsSorted.length;i++)
+    {
+        char letterGrade;
+        double percentile = (double)(studentsSorted.length-i)/(studentsSorted.length)*100;
+        if (percentile>=90.0)
+            letterGrade='A';
+        else if (percentile>=71.0)
+            letterGrade='B';
+        else if(percentile>=50)
+            letterGrade='C';
+        else if(percentile>=11)
+            letterGrade='D';
+        else
+            letterGrade='F';
+        gradeMap.put(studentsSorted[i],letterGrade);
+    }
+        return gradeMap;
+    }
+    public void giveATest()
+    {
+        for(Student current :students)
+        {
+            if (current==null)
+                continue;
+            current.takeATest();
+        }
+    }
+    public void giveTests(int numberToGive)
+    {
+        for(int i =0;i<numberToGive;i++)
+            giveATest();
     }
     @Override
     public String toString() {
@@ -108,36 +164,21 @@ public class Classroom
     }
     public static void main(String[] args)
     {
-        Student jebby = new Student("Jebby","Dougat");
-        Student debby = new Student("Debby","Shnuugat");
-        Student rebby = new Student ("Rebecca","P Wtkterwgoehwrqwsadasfsdf");
-        Student schlumbo = new Student ("Schlumbo","Withergraves");
-        jebby.addTestScore(100.00);
-        jebby.addTestScore(92.0);
-        jebby.addTestScore(93.0);
-        jebby.addTestScore(90.0);
-        debby.addTestScore(100.0);
-        debby.addTestScore(82);
-        debby.addTestScore(88);
-        debby.addTestScore(90.0);
-        rebby.addTestScore(100);
-        rebby.addTestScore(100);
-        rebby.addTestScore(100);
-        rebby.addTestScore(90.0);
-        Student[] constructorList = new Student[]{jebby,debby,rebby};
+        int emptySlots = 20;
+        Student[] constructorList = new Student[100];
+        for(int i=0;i< constructorList.length-emptySlots;i++)
+        {
+            constructorList[i]=new Student();
+        }
         Classroom daClass = new Classroom(constructorList);
-        Classroom daSecond = new Classroom(3);
-        daSecond.addStudent(jebby);
-        daSecond.addStudent(debby);
-        daSecond.addStudent(rebby);
-        daSecond.addStudent(schlumbo);
+
         System.out.println(daClass);
-        System.out.println(daSecond);
+        int numberOfTests = 10;
+        daClass.giveTests(numberOfTests);
         System.out.println(daClass.getAverageExamScore());
         System.out.println(daClass.getAverageExamScore(1));
         System.out.println(daClass.getAverageExamScore(4));
-        System.out.println(Arrays.toString(daSecond.getStudentsByScore()));
-        daSecond.removeStudent("Schlumbo","dumbo");
-        daSecond.removeStudent("Rebecca","P Wtkterwgoehwrqwsadasfsdf");
+
+        System.out.println(daClass.getGradeBook().toString());
     }
 }
