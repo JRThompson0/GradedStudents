@@ -112,7 +112,7 @@ public class Classroom
             }
             if ((currentHighest!=null))
             {
-                System.out.println("Class Rank " + (classRank + 1) + ":   " + currentHighest);
+                //System.out.println("Class Rank " + (classRank + 1) + ":   " + currentHighest);
                 studentsSorted[classRank] = currentHighest;
                 workList[contenderIndex] = null;
                 currentHighest = null;
@@ -122,24 +122,24 @@ public class Classroom
     }
     public HashMap<Student, Character> getGradeBook()
     {
-    Student[] studentsSorted = getStudentsByScore();
+        Student[] studentsSorted = getStudentsByScore();
         HashMap<Student, Character> gradeMap = new HashMap<Student, Character>();
-    for(int i = 0;i<studentsSorted.length;i++)
-    {
-        char letterGrade;
-        double percentile = (double)(studentsSorted.length-i)/(studentsSorted.length)*100;
-        if (percentile>=90.0)
+        for(int i = 0;i<studentsSorted.length;i++)
+        {
+            char letterGrade;
+            double percentile = (double)(studentsSorted.length-i)/(studentsSorted.length)*100;
+            if (percentile>=90.0)
             letterGrade='A';
-        else if (percentile>=71.0)
+            else if (percentile>=71.0)
             letterGrade='B';
-        else if(percentile>=50)
+            else if(percentile>=50)
             letterGrade='C';
-        else if(percentile>=11)
+            else if(percentile>=11)
             letterGrade='D';
-        else
+            else
             letterGrade='F';
-        gradeMap.put(studentsSorted[i],letterGrade);
-    }
+            gradeMap.put(studentsSorted[i],letterGrade);
+        }
         return gradeMap;
     }
     public void giveATest()

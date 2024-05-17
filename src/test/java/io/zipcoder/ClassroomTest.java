@@ -42,7 +42,13 @@ public class ClassroomTest
         assertEquals(90,rebby.getAverageTestScore());
         assertEquals(90.0,averageExam);
     }
-    public void testGetStudentsByScore() {
+    @Test
+    public void testGetStudentsByScore()
+    {
+        Student[] expected = {jebby,rebby,debby};
+        assertEquals(expected[0],daClass.getStudentsByScore()[0]);
+        assertEquals(expected[1],daClass.getStudentsByScore()[1]);
+        assertEquals(expected[2],daClass.getStudentsByScore()[2]);
     }
     public void testGetGradeBook() {
     }
