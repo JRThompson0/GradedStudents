@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -50,6 +51,12 @@ public class ClassroomTest
         assertEquals(expected[1],daClass.getStudentsByScore()[1]);
         assertEquals(expected[2],daClass.getStudentsByScore()[2]);
     }
+    @Test
     public void testGetGradeBook() {
+        HashMap<Student, Character> daMap=daClass.getGradeBook();
+        char actual = daMap.get(jebby);
+        assertEquals('A',actual);
+        actual = daMap.get(debby);
+        assertEquals('D',actual);
     }
 }
